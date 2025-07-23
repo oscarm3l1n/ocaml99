@@ -29,3 +29,35 @@ let rev lst =
         | hd :: tl -> aux (hd :: acc) tl
     in
     aux [] lst
+
+let is_palindrome lst =
+    List.rev lst = lst
+
+type 'a node =
+    | One of 'a
+    | Many of 'a node list
+
+let flatten lst =
+    let rec aux acc = function
+        | [] -> acc
+        | One x :: t -> aux (x :: acc) t
+        | Many l :: t -> aux (aux acc l) t
+    in
+    aux [] lst
+
+let compress lst =
+    let rec aux acc = function
+        | [] -> acc
+        | hd :: (snd :: _ as tl) ->
+            if hd = snd then
+                aux acc tl
+            else
+                aux (hd :: acc) tl
+        | h :: t -> aux (h :: acc) t
+    in
+
+    List.rev (aux [] lst)
+
+let rec compress' = function
+    | a :: (b :: _ as t) -> if a = b then compress' t else a :: compress' t
+    | smaller -> smaller
