@@ -61,3 +61,26 @@ let compress lst =
 let rec compress' = function
     | a :: (b :: _ as t) -> if a = b then compress' t else a :: compress' t
     | smaller -> smaller
+
+let pack lst =
+    let rec aux acc1 acc2 = function
+        | [] -> acc1
+        | a :: (b :: _ as t) ->
+            if a = b then aux acc1 (a :: acc2) t
+            else aux ((a :: acc2) :: acc1) [] t
+        | a :: [] -> (a :: acc2) :: acc1
+    in
+
+    List.rev (aux [] [] lst)
+
+let encode lst =
+    let rec aux n acc = function
+        | [] -> acc
+        | [x] -> (n+1,x) :: acc
+        | a :: (b :: _ as t) -> 
+            if a = b then aux (n+1) acc t
+            else aux 0 ((n+1, a) :: acc) t
+    in
+
+    List.rev (aux 0 [] lst)
+
