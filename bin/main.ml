@@ -84,3 +84,31 @@ let encode lst =
 
     List.rev (aux 0 [] lst)
 
+
+(* # duplicate ["a"; "b"; "c"; "c"; "d"];;
+- : string list = ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"] *)
+let duplicate lst =
+    let rec aux acc = function
+        | [] -> acc
+        | hd :: tl -> aux (hd :: hd :: acc) tl
+    in
+    List.rev (aux [] lst)
+
+(* # replicate ["a"; "b"; "c"] 3;; *)
+let replicate lst n =
+    let rec prepend n acc x =
+        if n=0 then acc else prepend (n-1) (x::acc) x
+    in
+
+    List.fold_left (prepend n) [] (List.rev lst)
+
+(* # drop ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 3;;
+- : string list = ["a"; "b"; "d"; "e"; "g"; "h"; "j"] *)
+let drop lst n =
+    let rec aux accu orig cur = function
+        | [] -> accu
+        | hd :: tl -> 
+            if cur=1 then aux accu orig orig tl
+            else aux (hd :: accu) orig (cur-1) tl
+    in
+    List.rev (aux [] n n lst)
